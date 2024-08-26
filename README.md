@@ -1,4 +1,4 @@
-# Famous Movies App
+# Movies App
 
 An Android app to browse and search popular movies by title or genre (e.g., Action, Sci-Fi). Includes detailed movie information and a sleek UI built with Jetpack Compose.
 
