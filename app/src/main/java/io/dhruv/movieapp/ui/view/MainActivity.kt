@@ -24,9 +24,15 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = ListScreen){
                     composable<ListScreen> {
                         MovieListScreen(viewModel){
+                            navController.navigate(DetailScreen(it))
                         }
                     }
-
+                    composable<DetailScreen> {
+                        val args = it.toRoute<DetailScreen>()
+                       MovieDetailScreen(viewModel,args.movie){
+                           navController.popBackStack(ListScreen, false)
+                       }
+                    }
                 }
             }
         }
@@ -36,4 +42,7 @@ class MainActivity : ComponentActivity() {
 @Serializable
 object ListScreen
 
-
+@Serializable
+data class DetailScreen(
+    val movie : Int
+)
