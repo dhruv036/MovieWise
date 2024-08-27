@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -40,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import io.dhruv.movieapp.ui.viewmodel.MainViewModel
 import io.dhruv.movieapp.R
 import io.dhruv.movieapp.data.model.MovieDetails
@@ -99,7 +101,7 @@ fun MovieListScreen(viewModel: MainViewModel, onItemClicked: (Int) -> Unit = {})
         Spacer(modifier = Modifier.height(18.dp))
 
         if (isSearching) {
-            Log.e("TAG", "MovieListScreen: ", )
+            Log.e("TAG", "MovieListScreen: ")
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -130,7 +132,7 @@ fun MovieItem(movie: MovieDetails = MovieDetails(), modifier: Modifier = Modifie
         modifier = modifier.padding(horizontal = 8.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = "https://image.tmdb.org/t/p/w400${movie.posterPath}",
             contentDescription = null,
             modifier = Modifier
@@ -138,10 +140,19 @@ fun MovieItem(movie: MovieDetails = MovieDetails(), modifier: Modifier = Modifie
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(16.dp)),
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.movie_image)
+            loading = {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(
+                        trackColor = Color(0xFFE0E0E0),
+                        strokeWidth = 8.dp,
+                        color = Color(0xFF616161),
+                        strokeCap = StrokeCap.Round,
+                        modifier = Modifier.size(48.dp))
+                }
+            }
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Row(modifier =Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = movie?.title ?: "Avenger -End Games",
                 fontWeight = FontWeight.Black,
